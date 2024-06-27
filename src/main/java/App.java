@@ -20,17 +20,19 @@ public class App {
         LogoGame.getLogoGame();
 
         player1 = CreateNewPlayer.createNewPlayer(scanner);
-        player1.setPlayerMove(true);
+        System.out.println("Hello " + player1.getName() + " and welcome to \"Battle of the Ships\"");
+
         GameBoard.placeShips(player1);
+        player1.setPlayerMove(true);
 
-        System.out.println("Hello and welcome to \"Battle of the Ships\"");
-
-        System.out.println("Hello " + player1.getName() + "!");
+        GameBoard.printBoard(player1.getGameBoard());
 
         int gameMode = GameMode.SetGameMode(scanner);
 
-        if (gameMode == 2) {
+        if (gameMode == 1) {
             player2 = CreateNewPlayer.createNewBot();
+            GameBoard.placeShips(player2);
+            GameBoard.printBoard(player2.getGameBoard());
         }
     }
 
