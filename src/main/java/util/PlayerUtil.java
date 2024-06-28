@@ -1,4 +1,4 @@
-package service;
+package util;
 
 import model.Player;
 import util.GameBoard;
@@ -10,7 +10,11 @@ import java.util.Scanner;
 /**
  * @author MR.k0F31n
  */
-public class CreateNewPlayer {
+public class PlayerUtil {
+    /**
+     * Создание игрока
+     * @return возращает готовый обьект "Игрок" с пустыми полями и полным набором кораблей
+     */
     public static Player createNewPlayer(Scanner scanner) {
         String name;
 
@@ -33,10 +37,15 @@ public class CreateNewPlayer {
         return player;
     }
 
+    /**
+     * Создаем игрока "БОТ"
+     * @return возращает готовый обьект "Игрок" с пустыми полями и полным набором кораблей
+     */
+
     public static Player createNewBot() {
         Player bot = new Player();
 
-        bot.setName("Player#2");
+        bot.setName("I'M_BOT");
         bot.setShips(newShips());
         bot.setGameBoard(GameBoard.createNewBoard());
         bot.setComponentGameBoard(GameBoard.createNewBoard());

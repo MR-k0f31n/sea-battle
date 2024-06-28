@@ -3,6 +3,10 @@ package model;
 /**
  * @author MR.k0F31n
  */
+
+/**
+ * Не удержался ^_^ "BATTLE OF THE SHIPS"
+ */
 public class Art {
     private static final String[] ART = {
             " ______     ______     ______   ______   __         ______        ______     ______      ______   __  __     ______        ______     __  __     __     ______   ______    \n" +
