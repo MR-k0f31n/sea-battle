@@ -4,10 +4,11 @@ package model;
  * @author MR.k0F31n
  */
 
-/**
- * Как будет играть "БОТ"
- */
+
 public enum GameModel {
-    SEARCH_SHIP,
-    END_ATTACK
+    /**
+     * Как будет играть "БОТ"
+     */
+    SEARCH_SHIP, // искать корабль
+    END_ATTACK // искать что добить
 }

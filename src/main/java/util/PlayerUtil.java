@@ -1,7 +1,6 @@
 package util;
 
 import model.Player;
-import util.GameBoard;
 
 import java.util.HashMap;
 import java.util.Map;
