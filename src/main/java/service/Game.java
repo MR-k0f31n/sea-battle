@@ -25,16 +25,19 @@ public class Game {
     private static final char DESTROYED_CELL = 'X';
     private static final char PAST_CELL = '*';
 
-
+    /**
+     * Основная игровая механика, конфигурация игры
+     */
     private void startGame() {
         Player player1;
         Player player2 = null;
 
         Scanner scanner = new Scanner(System.in);
+        //устанавливаем игрока 1
         player1 = playerUtil.createNewPlayer(scanner);
         System.out.println("Привет " + player1.getName() + " и добро пожаловать в \"Battle of the Ships v1.0\"");
         player1.setPlayerMove(true);
-
+        // устанавливаем метод формирования игровго поля
         if (GameMode.setShipPlacementMode(scanner) == 1) {
             gameBoard.placeShips(player1, 1);
             System.out.println("Ознакомтесь с вашим полем:\n");
@@ -44,13 +47,12 @@ public class Game {
             System.out.println("Ознакомтесь с вашим полем:\n");
             gameBoard.printBoard(player1.getGameBoard(), player1.getName());
         }
-
-
+        // устанавливаем игровой режим сингл или мульти
         if (GameMode.setGameMode(scanner) == 1) {
             player2 = playerUtil.createNewBot();
             gameBoard.placeShips(player2, 2);
         }
-
+        // добро пожаловать в ад
         boolean gameOver = false;
         while (!gameOver) {
             if (player2 != null) {
@@ -72,6 +74,9 @@ public class Game {
         LogoGame.getLogoGame(Art.getGameOver());
     }
 
+    /**
+     * Запускаем игру, показываем правила и по готовности игрок может вводить имя
+     */
     public void gameRulesAndStartGame() {
         Player player = playerUtil.createNewBot();
         gameBoard.placeShips(player, 2);
@@ -101,6 +106,9 @@ public class Game {
         startGame();
     }
 
+    /**
+     * Основная механика игры, передается 2 игрока играющий и принимающий удар
+     */
     private void play(Player player, Player opoPlayer) {
         System.out.println("\nОчередь игрока " + player.getName() + "\n");
         Scanner scanner = new Scanner(System.in);
@@ -111,6 +119,7 @@ public class Game {
         System.out.println("\nУ врага осталось кораблей:");
         printCountShips(opoPlayer.getShips());
         System.out.println("Командуйте командир - куда нанести удар?");
+
         while (!placeAttack) {
             System.out.println("(например: 2A) 'следите за раскладкой клавиатуры' \nЖдем команды: ");
             String coordinate = scanner.nextLine().toUpperCase();
@@ -145,11 +154,17 @@ public class Game {
         }
     }
 
+    /**
+     * Регистрируем попадание
+     */
     private void registerAnAttack(Player player, Player opoPlayer, int row, int col, char c) {
         opoPlayer.setCharOnBoardAttack(row, col, c);
         player.setCharOnBoardMemory(row, col, c);
     }
 
+    /**
+     * Проверка на уничтоженый корабль при попадании в любое судно
+     */
     private boolean checkDestroyShip(int startRow, int startCol, char[][] board) {
         // Проверка однопалубного корабля
         if ((isBorderOrEmpty(board, startRow - 1, startCol)) &&
@@ -207,7 +222,10 @@ public class Game {
         return board[row][col] == EMPTY_CELL || board[row][col] == PAST_CELL;
     }
 
-    // Замена ячеек убитого корабля на 'X' и подсчет ячеек
+    /**
+     * Перереисовываем уничтоженный корабль и подсчитываем какой имено был уничтожен корабль
+     * Возвращаем уничтоженый корабль что бы удалить его у игрока
+     */
     private int markDestroyedShip(Player player, Player opoPlayer, int row, int col) {
         int count = 0;
         char[][] board = opoPlayer.getGameBoard();
@@ -300,6 +318,9 @@ public class Game {
         return count;
     }
 
+    /**
+     * Говорящий метод, выводим информацию о оставшихся короблях
+     */
     private void printCountShips(Map<Integer, Integer> ships) {
         for (Map.Entry<Integer, Integer> entry : ships.entrySet()) {
             System.out.println("Кораблей шириной " + entry.getKey() + ", осталось: " + entry.getValue());
