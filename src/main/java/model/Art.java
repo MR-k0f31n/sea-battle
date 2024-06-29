@@ -26,11 +26,24 @@ public class Art {
                     "                                                                               "
     };
 
-    public static String[] getLogo(){
+    private static final String[] GOOD_LUCK = {
+            "   ______ ____   ____   ____     __    __  __ ______ __ __\n" +
+                    "  / ____// __ \\ / __ \\ / __ \\   / /   / / / // ____// //_/\n" +
+                    " / / __ / / / // / / // / / /  / /    / / / // /    / ,<   \n" +
+                    "/ /_/ // /_/ // /_/ // /_/ /  / /___/ /_/ // /___ / /| | \n" +
+                    "\\____/ \\____/ \\____//_____/  /_____/\\____/ \\____//_/ |_|  \n" +
+                    "                                                          "
+    };
+
+    public static String[] getLogo() {
         return LOGO;
     }
 
     public static String[] getGameOver() {
         return GAME_OVER;
+    }
+
+    public static String[] getGoodLuck() {
+        return GOOD_LUCK;
     }
 }

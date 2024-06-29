@@ -1,5 +1,6 @@
 package util;
 
+import model.Bot;
 import model.Player;
 
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class PlayerUtil {
      */
 
     public Player createNewBot() {
-        Player bot = new Player();
+        Bot bot = new Bot();
 
         bot.setName("I'M_BOT");
         bot.setShips(newShips());

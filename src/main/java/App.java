@@ -11,7 +11,7 @@ public class App {
 
     public static void main(String[] args) {
 
-        LogoGame.getLogoGame(Art.getLogo());
+        LogoGame.printArt(Art.getLogo());
         game.gameRulesAndStartGame();
 
     }

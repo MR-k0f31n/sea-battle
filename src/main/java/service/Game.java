@@ -1,6 +1,7 @@
 package service;
 
 import model.Art;
+import model.Bot;
 import model.Player;
 import util.GameBoard;
 import util.GameMode;
@@ -20,8 +21,8 @@ public class Game {
 
     private static final int SIZE = 16;
     private static final char EMPTY_CELL = '~';
-    private static final char SHIP_CELL = '■';
-    private static final char WOUNDED_CELL = '□';
+    private static final char SHIP_CELL = 'S';
+    private static final char WOUNDED_CELL = 'Z';
     private static final char DESTROYED_CELL = 'X';
     private static final char PAST_CELL = '*';
 
@@ -71,7 +72,7 @@ public class Game {
                 }
             }
         }
-        LogoGame.getLogoGame(Art.getGameOver());
+        LogoGame.printArt(Art.getGameOver());
     }
 
     /**
@@ -102,7 +103,7 @@ public class Game {
                 " если мимо, \nУбитые корабли отмечаются " + DESTROYED_CELL + ", \nРанненые коробали отмечаются символом "
                 + WOUNDED_CELL);
         gameBoard.printBoard(player.getComponentGameBoard(), "Player#2");
-        System.out.println("🚢 GOOD LUCK! 🚢");
+        LogoGame.printArt(Art.getGoodLuck());
         startGame();
     }
 
@@ -111,46 +112,63 @@ public class Game {
      */
     private void play(Player player, Player opoPlayer) {
         System.out.println("\nОчередь игрока " + player.getName() + "\n");
-        Scanner scanner = new Scanner(System.in);
         boolean placeAttack = false;
 
         gameBoard.printBoard(player.getComponentGameBoard(), opoPlayer.getName());
 
         System.out.println("\nУ врага осталось кораблей:");
         printCountShips(opoPlayer.getShips());
-        System.out.println("Командуйте командир - куда нанести удар?");
 
         while (!placeAttack) {
-            System.out.println("(например: 2A) 'следите за раскладкой клавиатуры' \nЖдем команды: ");
-            String coordinate = scanner.nextLine().toUpperCase();
-            if (!coordinate.matches("\\d{1,2}[A-P]")) {
-                System.out.println("Неверная координата: " + coordinate + ". Попробуйте еще раз.");
+            int row, col;
+            if (player instanceof Bot) {
+                int[] move = ((Bot) player).getNextMove();
+                row = move[0];
+                col = move[1];
+                System.out.println("Бот стреляет по координатам: " + (row + 1) + (char) (col + 'A'));
             } else {
-                int row = Integer.parseInt(coordinate.substring(0, coordinate.length() - 1)) - 1; // Получаем строку (2 -> 1)
-                int col = coordinate.charAt(coordinate.length() - 1) - 'A';
-                char c = opoPlayer.getGameBoard()[row][col];
-                if (c == PAST_CELL || c == WOUNDED_CELL || c == DESTROYED_CELL) {
-                    System.out.println("Коммандир, мы уже били по этим координатам!");
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("(например: 2A) 'следите за раскладкой клавиатуры' \nЖдем команды: ");
+                String coordinate = scanner.nextLine().toUpperCase();
+                if (!coordinate.matches("\\d{1,2}[A-P]")) {
+                    System.out.println("Неверная координата: " + coordinate + ". Попробуйте еще раз.");
+                    continue;
                 }
-                switch (c) {
-                    case EMPTY_CELL:
-                        System.out.println("Мимо!");
-                        registerAnAttack(player, opoPlayer, row, col, PAST_CELL);
-                        player.setPlayerMove(false);
-                        opoPlayer.setPlayerMove(true);
-                        break;
-                    case SHIP_CELL:
-                        System.out.println("Есть пробитие!");
-                        registerAnAttack(player, opoPlayer, row, col, WOUNDED_CELL);
-                        if (checkDestroyShip(row, col, opoPlayer.getGameBoard())) {
-                            int destroyShips = markDestroyedShip(player, opoPlayer, row, col);
-                            opoPlayer.destroyShip(destroyShips);
-                            System.out.println("Убил!");
-                            break;
-                        }
-                }
+                row = Integer.parseInt(coordinate.substring(0, coordinate.length() - 1)) - 1; // Получаем строку (2 -> 1)
+                col = coordinate.charAt(coordinate.length() - 1) - 'A';
             }
-            placeAttack = true;
+
+            char c = opoPlayer.getGameBoard()[row][col];
+            if (c == PAST_CELL || c == WOUNDED_CELL || c == DESTROYED_CELL) {
+                System.out.println("Коммандир, мы уже били по этим координатам!");
+                continue;
+            }
+
+            switch (c) {
+                case EMPTY_CELL:
+                    System.out.println("Мимо!");
+                    registerAnAttack(player, opoPlayer, row, col, PAST_CELL);
+                    player.setPlayerMove(false);
+                    opoPlayer.setPlayerMove(true);
+                    placeAttack = true;
+                    break;
+                case SHIP_CELL:
+                    System.out.println("Есть пробитие!");
+                    registerAnAttack(player, opoPlayer, row, col, WOUNDED_CELL);
+                    if (player instanceof Bot) {
+                        ((Bot) player).registerHit(row, col);
+                    }
+                    if (checkDestroyShip(row, col, opoPlayer.getGameBoard())) {
+                        int destroyShips = markDestroyedShip(player, opoPlayer, row, col);
+                        opoPlayer.destroyShip(destroyShips);
+                        System.out.println("Убил!");
+                        if (player instanceof Bot) {
+                            ((Bot) player).clearHits();
+                        }
+                    }
+                    placeAttack = true;
+                    break;
+            }
         }
     }
 
