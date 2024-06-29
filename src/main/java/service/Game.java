@@ -151,10 +151,12 @@ public class Game {
                     player.setPlayerMove(false);
                     opoPlayer.setPlayerMove(true);
                     placeAttack = true;
+                    stopThread();
                     break;
                 case SHIP_CELL:
                     System.out.println("Есть пробитие!");
                     registerAnAttack(player, opoPlayer, row, col, WOUNDED_CELL);
+                    stopThread();
                     if (player instanceof Bot) {
                         ((Bot) player).registerHit(row, col);
                     }
@@ -165,6 +167,7 @@ public class Game {
                         if (player instanceof Bot) {
                             ((Bot) player).clearHits();
                         }
+                        stopThread();
                     }
                     placeAttack = true;
                     break;
@@ -342,6 +345,14 @@ public class Game {
     private void printCountShips(Map<Integer, Integer> ships) {
         for (Map.Entry<Integer, Integer> entry : ships.entrySet()) {
             System.out.println("Кораблей шириной " + entry.getKey() + ", осталось: " + entry.getValue());
+        }
+    }
+
+    private void stopThread() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println("Что-то пошло не так");
         }
     }
 }
