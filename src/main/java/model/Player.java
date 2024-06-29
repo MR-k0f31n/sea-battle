@@ -25,4 +25,26 @@ public class Player {
     private char[][] componentGameBoard;
     private Map<Integer, Integer> ships;
     private boolean isPlayerMove;
+
+    public void setCharOnBoardAttack(int row, int col, char c) {
+        gameBoard[row][col] = c;
+    }
+
+    public void setCharOnBoardMemory(int row, int col, char c) {
+        componentGameBoard[row][col] = c;
+    }
+
+    public void destroyShip(int key) {
+        if (ships.containsKey(key)) {
+            int value = ships.get(key);
+
+            if (value > 1) {
+                // Инкрементируем значение
+                ships.put(key, value - 1);
+            } else if (value == 1) {
+                // Удаляем ключ из карты
+                ships.remove(key);
+            }
+        }
+    }
 }

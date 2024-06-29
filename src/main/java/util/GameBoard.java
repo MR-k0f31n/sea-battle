@@ -19,7 +19,7 @@ public class GameBoard {
      *
      * @return возвращаем матрицу
      */
-    public static char[][] createNewBoard() {
+    public char[][] createNewBoard() {
         char[][] board = new char[SIZE][SIZE];
         for (int row = 0; row < SIZE; row++) {
             Arrays.fill(board[row], '~');
@@ -32,7 +32,7 @@ public class GameBoard {
      *
      * @param board - передается матрица игрого поля
      */
-    public static void printBoard(char[][] board, String name) {
+    public void printBoard(char[][] board, String name) {
         System.out.println("Поле игрока: " + name + " \n");
         // Печать координат по горизонтали A-P
         System.out.print("   ");
@@ -58,7 +58,7 @@ public class GameBoard {
      *
      * @param player - передаем обьект игрока, нужно для получения игрового поля.
      */
-    public static void placeShips(Player player, int mode) {
+    public void placeShips(Player player, int mode) {
         int[] shipSizes = {6, 5, 5, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1};
         for (int shipSize : shipSizes) {
             if (mode == 2) {
@@ -72,7 +72,7 @@ public class GameBoard {
     /**
      * Ручной метод расстановки короблей, с проверкой корректности внесенных координат защищая границы по 1-16, A-P
      */
-    private static void placeShipByPlayer(int shipSize, char[][] board, String name) {
+    private void placeShipByPlayer(int shipSize, char[][] board, String name) {
         Scanner scanner = new Scanner(System.in);
         printBoard(board, name);
         boolean placed = false;
@@ -120,7 +120,7 @@ public class GameBoard {
     /**
      * Проверка возможности разместить корабль, учитывая правило между короблями по всем направлениям 1 клетка
      */
-    private static boolean canPlaceShipWithBuffer(int[] rows, int[] cols, int shipSize, char[][] board) {
+    private boolean canPlaceShipWithBuffer(int[] rows, int[] cols, int shipSize, char[][] board) {
         for (int i = 0; i < shipSize; i++) {
             int row = rows[i];
             int col = cols[i];
@@ -138,7 +138,7 @@ public class GameBoard {
     /**
      * Рисуем кораблик
      */
-    private static void placeShip(int[] rows, int[] cols, int shipSize, char[][] board) {
+    private void placeShip(int[] rows, int[] cols, int shipSize, char[][] board) {
         for (int i = 0; i < shipSize; i++) {
             board[rows[i]][cols[i]] = SHIP_CELL;
         }
@@ -151,7 +151,7 @@ public class GameBoard {
      * @param count    - количество таких кораблей
      * @param board    - передаем игровое поле где их нужно установить
      */
-    private static void placeShipsOfSize(int shipSize, int count, char[][] board) {
+    private void placeShipsOfSize(int shipSize, int count, char[][] board) {
         Random rand = new Random();
 
         for (int i = 0; i < count; i++) {
@@ -188,7 +188,7 @@ public class GameBoard {
      * @param board      - игровое поле
      * @return - возвращает возможность размещение корабля
      */
-    private static boolean canPlaceShip(int startRow, int startCol, int shipSize, boolean horizontal, char[][] board) {
+    private boolean canPlaceShip(int startRow, int startCol, int shipSize, boolean horizontal, char[][] board) {
         if (horizontal) {
             // Проверка что корабль помещается в игровое поле
             if (startCol + shipSize > SIZE) {
@@ -230,7 +230,7 @@ public class GameBoard {
      * @param horizontal - горизонтально\вертикальное распложение корабля
      * @param board      - игровое поле
      */
-    private static void placeShip(int startRow, int startCol, int shipSize, boolean horizontal, char[][] board) {
+    private void placeShip(int startRow, int startCol, int shipSize, boolean horizontal, char[][] board) {
         if (horizontal) {
             for (int col = startCol; col < startCol + shipSize; col++) {
                 board[startRow][col] = SHIP_CELL;
@@ -245,7 +245,7 @@ public class GameBoard {
     /**
      * Проверка вместимости корабля
      */
-    private static boolean isOutOfBounds(int row, int col) {
+    private boolean isOutOfBounds(int row, int col) {
         return row < 0 || row >= SIZE || col < 0 || col >= SIZE;
     }
 

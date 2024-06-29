@@ -1,3 +1,4 @@
+import model.Art;
 import service.Game;
 import util.LogoGame;
 
@@ -6,10 +7,12 @@ import util.LogoGame;
  */
 public class App {
 
+    private static final Game game = new Game();
+
     public static void main(String[] args) {
 
-        LogoGame.getLogoGame();
-        Game.gameRulesAndStartGame();
+        LogoGame.getLogoGame(Art.getLogo());
+        game.gameRulesAndStartGame();
 
     }
 
