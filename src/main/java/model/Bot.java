@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author MR.k0F31n
+ */
+
 public class Bot extends Player {
     private List<int[]> hitCoordinates = new ArrayList<>();
     private Random random = new Random();
